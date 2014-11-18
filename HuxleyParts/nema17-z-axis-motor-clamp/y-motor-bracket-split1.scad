@@ -12,7 +12,7 @@ clipSeparation = [32 + clipWidth / 2, 5, 0];
 clipHeadDiameter = 20;
 
 screwHoleDiameter = 3;
-wirePortDiameter = 9;
+wirePortDiameter = 8;
 beltSpace = 3;
 thinWidth = 4;
 beltWidth = 7;
@@ -35,7 +35,7 @@ outerMotorHoleDiameter = motorHoleDiameter
 	+ minimumThickness
 	+ screwHoleDiameter;
 
-motorTwist = -9;
+motorTwist = 15;
 
 barThickness = clipHeadDiameter / 2 - clipWidth /2;
 
@@ -61,10 +61,10 @@ module drawFilledPanel() {
 
 	difference() {
 		translate([assemblyBottom,
-				screwHoleDiameter / 2 - motorHoleDiameter/2 * sin(motorTwist),
+				screwHoleDiameter / 2,
 				0])
 			cube([barThickness,
-				motorHoleDiameter / 2 + clipHeadDiameter / 2 + motorHoleDiameter/2 * sin(motorTwist),
+				motorHoleDiameter / 2 + clipHeadDiameter / 2,
 				panelWidth]);
 		translate([-motorHoleDiameter / 2, 0, 0])
 			cylinder(h = panelWidth, d = screwHoleDiameter);
@@ -73,7 +73,7 @@ module drawFilledPanel() {
 		arc(	[	assemblyTop - 1,
 				motorHoleDiameter / 2 + clipHeadDiameter/2 - clipWidth/2,
 				0],
-			[assemblyTop, 0,0],
+			[cos(motorTwist) * motorHoleDiameter/2 , sin(motorTwist) * motorHoleDiameter/2,0],
 			45, panelWidth, barThickness );
 		rotate([0,0,motorTwist])
 		translate([motorHoleDiameter / 2, 0, 0])
@@ -83,9 +83,10 @@ module drawFilledPanel() {
 
 difference() {
 	drawFilledPanel();
-	rotate([0,0,-26])
+	rotate([0,0,-23])
 	translate([ 0, motorHoleDiameter/2 - screwHoleDiameter/2 + minimumThickness, 0])
 		cylinder(h = panelWidth, d = wirePortDiameter);
+	
 	translate([3,0,thinWidth])
 		rotate([0,0,-34])
 			cube([beltSpace, 100, beltWidth]);
